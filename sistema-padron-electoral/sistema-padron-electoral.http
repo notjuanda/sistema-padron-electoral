@@ -1,0 +1,6 @@
+@sistema_padron_electoral_HostAddress = http://localhost:5048
+
+GET {{sistema_padron_electoral_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

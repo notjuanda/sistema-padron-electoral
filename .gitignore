@@ -1,0 +1,50 @@
+# Compilación
+bin/
+obj/
+out/
+
+# Archivos de depuración VS
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Configuración local de VS
+.vs/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Archivos de dependencias locales
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+# Archivos de logs
+*.log
+
+# Config VS Code
+.vscode/
+
+# Archivos generados por cobertura
+coverage/
+*.coverage
+*.coveragexml
+
+# Configuración docker local
+docker-compose.override.yml
+
+# Config IIS Express
+.vsconfig
+.vs/
+iisexpress/
+
+# Archivos secretos o temporales
+secrets.json
+*.env
+
+# Otros del sistema operativo
+.DS_Store
+Thumbs.db
