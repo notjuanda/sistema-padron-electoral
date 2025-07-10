@@ -147,7 +147,6 @@ namespace sistema_padron_electoral.Controllers
                     return NotFound();
                 }
 
-                // Eliminar imágenes asociadas si existen
                 DeleteFileIfExists(votante.FotoCarnetAnverso);
                 DeleteFileIfExists(votante.FotoCarnetReverso);
                 DeleteFileIfExists(votante.FotoVotante);
@@ -163,7 +162,6 @@ namespace sistema_padron_electoral.Controllers
             }
         }
 
-        // ENDPOINT PÚBLICO: Consulta de estado de padrón por CI
         [AllowAnonymous]
         [HttpGet("consulta-publica/{ci}")]
         public async Task<ActionResult<object>> ConsultaPublicaPorCI(string ci)
@@ -191,12 +189,35 @@ namespace sistema_padron_electoral.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet("por-recinto/{recintoId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetVotantesPorRecinto(int recintoId)
+        {
+            try
+            {
+                var votantes = await _context.Votante
+                    .Where(v => v.RecintoId == recintoId)
+                    .Select(v => new {
+                        v.Id,
+                        v.NombreCompleto,
+                        v.CI
+                    })
+                    .OrderBy(v => v.NombreCompleto)
+                    .ToListAsync();
+                
+                return Ok(votantes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al obtener votantes del recinto: {ex.Message}");
+            }
+        }
+
         private bool VotanteExists(Guid id)
         {
             return _context.Votante.Any(e => e.Id == id);
         }
 
-        // Método privado para guardar archivos
         private async Task<string> SaveFileAsync(IFormFile file)
         {
             try
@@ -225,8 +246,6 @@ namespace sistema_padron_electoral.Controllers
                 throw new Exception($"Error al guardar archivo: {ex.Message}", ex);
             }
         }
-
-        // Método privado para eliminar archivo si existe
         private void DeleteFileIfExists(string relativePath)
         {
             if (string.IsNullOrEmpty(relativePath)) return;
