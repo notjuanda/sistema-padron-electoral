@@ -69,7 +69,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPadronOnly", policy =>
-        policy.RequireClaim("rol", "admin_padron", "super_admin"));
+        policy.RequireClaim("rol", "admin_padron", "super_admin", "jurado_electoral"));
 });
 
 builder.Services.AddCors(options =>
