@@ -4,6 +4,8 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using sistema_padron_electoral.Data;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<sistema_padron_electoralContext>(options =>
@@ -51,7 +53,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes("clave_secreta_segura_y@secreta123"))
         };
-        // Modificación para aceptar JWT desde cookie 'token'
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -97,6 +98,13 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+    RequestPath = "/uploads"
+});
 
 app.MapControllers();
 
